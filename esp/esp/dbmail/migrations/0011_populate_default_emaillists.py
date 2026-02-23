@@ -19,34 +19,34 @@ def create_default_emaillists(apps, schema_editor):
     
     default_lists = [
         {
-            'regex': r'^([a-zA-Z0-9_]+)s([0-9]+)c([0-9]+)-(students|teachers|class)$',
+            'regex': r'^\w(\d+)s(\d+)-(class|teachers|students)$',
             'seq': 10,
             'handler': 'SectionList',
-            'description': 'Section mailing lists (e.g., S123C1-students)',
+            'description': 'Individual sections of a class',
             'admin_hold': False,
             'cc_all': False,
         },
         {
-            'regex': r'^([a-zA-Z0-9_]+)s([0-9]+)-(students|teachers|class)$',
+            'regex': r'^\w(\d+)-(class|teachers|students)$',
             'seq': 20,
             'handler': 'ClassList',
-            'description': 'Class mailing lists (e.g., S123-students)',
+            'description': 'Email Class Rosters',
             'admin_hold': False,
             'cc_all': False,
         },
         {
-            'regex': r'^([a-zA-Z0-9_\.\-]+)$',
+            'regex': r'^(.*)$',
             'seq': 30,
             'handler': 'PlainList',
-            'description': 'Plain redirect lists (looks up in PlainRedirect table)',
+            'description': 'Manual Email List Redirects',
             'admin_hold': False,
             'cc_all': False,
         },
         {
-            'regex': r'^([a-zA-Z0-9_\.\-]+)$',
+            'regex': r'^(.*)$',
             'seq': 40,
             'handler': 'UserEmail',
-            'description': 'User email forwarding (forwards to user\'s email address)',
+            'description': 'Mail list for all teachers.',
             'admin_hold': False,
             'cc_all': False,
         },
@@ -65,9 +65,9 @@ def remove_default_emaillists(apps, schema_editor):
     
     # Remove only the default entries we created
     default_regexes = [
-        r'^([a-zA-Z0-9_]+)s([0-9]+)c([0-9]+)-(students|teachers|class)$',
-        r'^([a-zA-Z0-9_]+)s([0-9]+)-(students|teachers|class)$',
-        r'^([a-zA-Z0-9_\.\-]+)$',
+        r'^\w(\d+)s(\d+)-(class|teachers|students)$',
+        r'^\w(\d+)-(class|teachers|students)$',
+        r'^(.*)$',
     ]
     
     for regex in default_regexes:
