@@ -99,10 +99,12 @@ class Command(BaseCommand):
         
         self.stdout.write(
             self.style.SUCCESS(
-                f'\nSuccessfully created {created_count} default EmailList entries.'
+                f'\nSuccessfully created {created_count} default '
+                'EmailList entries.'
             )
         )
         self.stdout.write(
             'Email routing should now work properly. '
-            'You can view and manage these lists at /admin/dbmail/emaillist/'
+            'You can view and manage these lists at '
+            '/admin/dbmail/emaillist/'
         )
