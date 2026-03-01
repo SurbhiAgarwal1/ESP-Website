@@ -34,7 +34,23 @@
             <h4>Subject: {{ subject }}</h4>
             <hr>
             <div class="email-content">
-                {{ msgtext|linebreaks }}
+                {% if '<html' in msgtext %}
+                    <div class="mb-3">
+                        <h5>HTML view</h5>
+                        <iframe
+                            class="w-100 border"
+                            style="min-height: 400px;"
+                            sandbox
+                            srcdoc="{{ msgtext|escape }}">
+                        </iframe>
+                    </div>
+                    <div>
+                        <h5>Plaintext view</h5>
+                        <pre class="border p-2 bg-light">{{ msgtext }}</pre>
+                    </div>
+                {% else %}
+                    <pre class="border p-2 bg-light">{{ msgtext }}</pre>
+                {% endif %}
             </div>
         </div>
     </div>
