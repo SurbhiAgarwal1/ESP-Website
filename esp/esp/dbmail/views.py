@@ -88,10 +88,22 @@ def send_test_email(request, message_request_id):
     
     msg_req = get_object_or_404(MessageRequest, id=message_request_id)
     admin_user = request.user
-    
-    # Render email with admin's data
-    subject = msg_req.parseSmartText(msg_req.subject, admin_user)
-    msgtext = msg_req.parseSmartText(msg_req.msgtext, admin_user)
+
+    # Choose a sample recipient for rendering, defaulting to the admin.
+    sample_recipient = admin_user
+    get_sample_recipient = getattr(msg_req, 'get_sample_recipient', None)
+    if callable(get_sample_recipient):
+        try:
+            candidate = get_sample_recipient()
+            if candidate is not None:
+                sample_recipient = candidate
+        except Exception:
+            # Fall back to admin_user if sample recipient resolution fails
+            pass
+
+    # Render email with sample recipient's data (but send to admin's address)
+    subject = msg_req.parseSmartText(msg_req.subject, sample_recipient)
+    msgtext = msg_req.parseSmartText(msg_req.msgtext, sample_recipient)
     
     # Determine sender
     if msg_req.sender and len(msg_req.sender.strip()) > 0:
