@@ -19,57 +19,51 @@
         <div class="card-header bg-info text-white">
             <h5>Email Details</h5>
         </div>
-        <div class="card-body">
+<div class="row-fluid">
+    <div class="span12">
+        <h2>Email Preview</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="well">
+            <h4>Email Details</h4>
             <p><strong>From:</strong> {{ send_from }}</p>
             <p><strong>To:</strong> {{ recipient_count }} recipient(s)</p>
             <p><strong>Sample User:</strong> {{ sample_user.username }} ({{ sample_user.email }})</p>
         </div>
-    </div>
-    
-    <div class="card mb-3">
-        <div class="card-header bg-primary text-white">
-            <h5>Email Preview</h5>
-        </div>
-        <div class="card-body">
+
+        <div class="well">
+            <h4>Email Preview</h4>
             <h4>Subject: {{ subject }}</h4>
             <hr>
             <div class="email-content">
-                {% if '<html' in msgtext %}
-                    <div class="mb-3">
-                        <h5>HTML view</h5>
-                        <iframe
-                            class="w-100 border"
-                            style="min-height: 400px;"
-                            sandbox
-                            srcdoc="{{ msgtext|escape }}">
-                        </iframe>
-                    </div>
-                    <div>
-                        <h5>Plaintext view</h5>
-                        <pre class="border p-2 bg-light">{{ msgtext }}</pre>
-                    </div>
-                {% else %}
-                    <pre class="border p-2 bg-light">{{ msgtext }}</pre>
-                {% endif %}
+                {{ msgtext|linebreaks }}
             </div>
         </div>
-    </div>
-    
-    <div class="btn-group" role="group">
-        <form method="POST" action="{% url 'send_test_email' msg_req.id %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-warning">
-                Send Test Email to Me
-            </button>
-        </form>
-        
-        <a href="{% url 'send_email' msg_req.id %}" class="btn btn-success ml-2">
-            Send to All Recipients
-        </a>
-        
-        <a href="javascript:history.back()" class="btn btn-secondary ml-2">
-            Back to Edit
-        </a>
+
+        <div class="btn-group">
+            <form method="POST" action="{% url 'send_test_email' msg_req.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning">
+                    Send Test Email to Me
+                </button>
+            </form>
+
+            <a href="{% url 'send_email' msg_req.id %}" class="btn btn-success">
+                Send to All Recipients
+            </a>
+
+            <a href="javascript:history.back()" class="btn">
+                Back to Edit
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}
