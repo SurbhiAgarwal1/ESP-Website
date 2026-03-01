@@ -42,12 +42,13 @@ class EmailPreviewViewTestCase(TestCase):
         )
         
         # Create a test message request with template variables
-        self.msg_req = MessageRequest.objects.create(
+        self.msg_req = MessageRequest.createRequest(
             subject='Welcome {{user.first_name}}!',
             msgtext='Hello {{user.first_name}} {{user.last_name}}, welcome to our program.',
             sender='noreply@example.com',
             creator=self.admin_user,
-            recipients=self.filter
+            recipients=self.filter,
+            var_dict={'user': self.recipient_user},
         )
     
     def test_preview_email_requires_login(self):
