@@ -11,12 +11,12 @@ def create_default_emaillists(apps, schema_editor):
     user emails, and plain redirects.
     """
     EmailList = apps.get_model('dbmail', 'EmailList')
-    
+
     # Only create defaults if no EmailList entries exist
     # (to avoid duplicating on existing sites)
     if EmailList.objects.exists():
         return
-    
+
     default_lists = [
         {
             'regex': r'^\w(\d+)s(\d+)-(class|teachers|students)$',
@@ -51,7 +51,7 @@ def create_default_emaillists(apps, schema_editor):
             'cc_all': False,
         },
     ]
-    
+
     for list_data in default_lists:
         EmailList.objects.create(**list_data)
 
@@ -62,16 +62,17 @@ def remove_default_emaillists(apps, schema_editor):
     Only removes entries that match our default patterns exactly.
     """
     EmailList = apps.get_model('dbmail', 'EmailList')
-    
+
     # Remove only the default entries we created
     default_regexes = [
         r'^\w(\d+)s(\d+)-(class|teachers|students)$',
         r'^\w(\d+)-(class|teachers|students)$',
         r'^(.*)$',
     ]
-    
+
     for regex in default_regexes:
         EmailList.objects.filter(regex=regex).delete()
+
 
 
 class Migration(migrations.Migration):

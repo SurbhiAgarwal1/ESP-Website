@@ -28,10 +28,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         force = options.get('force', False)
-        
+
         # Check if email lists already exist
         existing_count = EmailList.objects.count()
-        
+
         if existing_count > 0 and not force:
             self.stdout.write(
                 self.style.WARNING(
@@ -40,7 +40,7 @@ class Command(BaseCommand):
                 )
             )
             return
-        
+
         if force and existing_count > 0:
             self.stdout.write(
                 self.style.WARNING(
@@ -48,7 +48,7 @@ class Command(BaseCommand):
                 )
             )
             EmailList.objects.all().delete()
-        
+
         # Define default email lists
         default_lists = [
             {
@@ -84,7 +84,7 @@ class Command(BaseCommand):
                 'cc_all': False,
             },
         ]
-        
+
         # Create the email lists
         created_count = 0
         for list_data in default_lists:
@@ -96,7 +96,7 @@ class Command(BaseCommand):
                     f'(seq={email_list.seq}, handler={email_list.handler})'
                 )
             )
-        
+
         self.stdout.write(
             self.style.SUCCESS(
                 f'\nSuccessfully created {created_count} default '
