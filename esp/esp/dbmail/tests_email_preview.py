@@ -157,7 +157,7 @@ class SendTestEmailViewTestCase(TestCase):
     
     def _add_messages_to_request(self, request):
         """Helper to add messages framework to request"""
-        setattr(request, 'session', 'session')
+        setattr(request, 'session', {})
         messages = FallbackStorage(request)
         setattr(request, '_messages', messages)
         return request
